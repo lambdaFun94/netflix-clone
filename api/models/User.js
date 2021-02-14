@@ -38,7 +38,7 @@ UserSchema.methods.matchPassword = async function (inputPassword) {
 };
 
 // Generate JWT
-UserSchema.methods.genereateSignedJWT = async function () {
+UserSchema.methods.generateSignedJWT = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRY_TIME,
   });

@@ -23,4 +23,4 @@ const processData = (rawString, outputFileName) => {
   fs.writeFileSync(`../${outputFileName}.js`, stringAsExport);
 };
 
-processData(rawString, "dataForSeeding");
+processData(rawString, "filmDataForSeeding");

@@ -5,6 +5,7 @@ import "colors";
 import connectDB from "./config/db.js";
 import Movie from "./models/Movie.js";
 import authRoutes from "./routes/authRoutes.js";
+import { errorHandler, pageNotFound } from "./middleware/errorHandler.js";
 
 const app = express();
 connectDB();
@@ -16,14 +17,19 @@ app.use(express.json());
 // Mount route handlers
 app.use("/api/v1/auth", authRoutes);
 
+// Check if running
 app.get("/", (req, res) => {
   res.send("Express is running");
 });
 
+// Test movie retrieval
 app.get("/api/test", async (req, res) => {
   const movies = await Movie.find();
   res.status(200).json(movies);
 });
+
+app.use(pageNotFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
