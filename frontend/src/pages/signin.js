@@ -1,28 +1,32 @@
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { HeaderContainer } from "../containers/header";
 import { FooterContainer } from "../containers/footer";
 import { Form } from "../components";
+import { signinUser } from "../redux/slices/userSlice";
 import * as ROUTES from "../constants/routes";
 
-export default function Signin() {
-  const history = useHistory();
-  const [emailAddress, setEmailAddress] = useState("");
+export default function Signin({ location, history }) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  // Check elems are valid
+  const dispatch = useDispatch();
+  const { error, status } = useSelector((state) => state.user);
 
-  const isInvalid = password === "" || emailAddress === "";
+  const isInvalid = password === "" || email === "";
   const handleSignIn = (e) => {
     e.preventDefault();
-
-    if (password === "andrew" && emailAddress === "andrew") {
-      history.push(ROUTES.BROWSE);
-    } else {
-    }
+    dispatch(signinUser({ email, password }));
   };
+
+  const redirect = location.search
+    ? location.search.split("=")[1]
+    : ROUTES.BROWSE;
+
+  useEffect(() => {
+    status === "success" && history.push(redirect);
+  }, [status, redirect, history]);
 
   return (
     <>
@@ -33,8 +37,8 @@ export default function Signin() {
           <Form.Base onSubmit={handleSignIn} method="POST">
             <Form.Input
               placeholder="Email address"
-              value={emailAddress}
-              onChange={({ target }) => setEmailAddress(target.value)}
+              value={email}
+              onChange={({ target }) => setEmail(target.value)}
             ></Form.Input>
             <Form.Input
               type="password"

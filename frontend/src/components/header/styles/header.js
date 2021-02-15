@@ -108,7 +108,8 @@ export const SearchIcon = styled.button`
 `;
 
 export const ButtonLink = styled(ReachRouterLink)`
-  display: block;
+  display: flex;
+  justify-content: center;
   background-color: #e50914;
   width: 84px;
   height: fit-content;

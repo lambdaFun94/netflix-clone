@@ -3,9 +3,10 @@ import morgan from "morgan";
 import "colors";
 
 import connectDB from "./config/db.js";
-import Movie from "./models/Movie.js";
 import authRoutes from "./routes/authRoutes.js";
+import browseRoutes from "./routes/browseRoutes.js";
 import { errorHandler, pageNotFound } from "./middleware/errorHandler.js";
+import { protect, authorize } from "./middleware/authMiddleware.js";
 
 const app = express();
 connectDB();
@@ -16,17 +17,22 @@ app.use(express.json());
 
 // Mount route handlers
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/films", browseRoutes);
 
 // Check if running
 app.get("/", (req, res) => {
   res.send("Express is running");
 });
 
-// Test movie retrieval
-app.get("/api/test", async (req, res) => {
-  const movies = await Movie.find();
-  res.status(200).json(movies);
-});
+// Test route
+app.get(
+  "/api/test",
+  protect,
+  authorize(["admin", "user"]),
+  async (req, res) => {
+    res.send("Test page");
+  }
+);
 
 app.use(pageNotFound);
 app.use(errorHandler);

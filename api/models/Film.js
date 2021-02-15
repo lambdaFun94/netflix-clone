@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const MovieSchema = mongoose.Schema({
   type: {
     type: String,
-    enum: ["film", "series"],
-    default: "film",
+    enum: ["movie", "series"],
+    default: "movie",
   },
   title: String,
   description: String,

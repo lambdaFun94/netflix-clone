@@ -1,44 +1,33 @@
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { HeaderContainer } from "../containers/header";
 import { FooterContainer } from "../containers/footer";
 import { Form } from "../components";
+import { signupUser } from "../redux/slices/userSlice";
 import * as ROUTES from "../constants/routes";
 
-export default function Signup() {
-  const history = useHistory();
+export default function Signup({ history, location }) {
   const [name, setName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  // Check elems are valid
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.user);
 
-  const isInvalid = name === "" || password === "" || emailAddress === "";
+  const isInvalid = name === "" || password === "" || email === "";
   const handleSignup = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post(ROUTES.SIGNUP_POST, {
-        name,
-        email: emailAddress,
-        password,
-        profilePicture: Math.floor(Math.random() * 5) + 1,
-      });
-
-      if (data.success) {
-        history.push(ROUTES.BROWSE);
-      } else {
-        setError("User not created! Please try again.");
-      }
-    } catch (err) {
-      setName("");
-      setEmailAddress("");
-      setPassword("");
-      setError("User not created! Please try again.");
-    }
+    dispatch(signupUser({ name, email, password }));
   };
+
+  const redirect = location.history
+    ? location.search.split("=")[1]
+    : ROUTES.BROWSE;
+
+  useEffect(() => {
+    status === "success" && history.push(redirect);
+  }, [status, history, redirect]);
 
   return (
     <>
@@ -54,8 +43,8 @@ export default function Signup() {
             ></Form.Input>
             <Form.Input
               placeholder="Email address"
-              value={emailAddress}
-              onChange={({ target }) => setEmailAddress(target.value)}
+              value={email}
+              onChange={({ target }) => setEmail(target.value)}
             ></Form.Input>
             <Form.Input
               type="password"

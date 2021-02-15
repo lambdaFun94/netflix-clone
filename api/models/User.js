@@ -25,12 +25,19 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: false,
   },
+  role: {
+    type: String,
+    required: true,
+    default: "user",
+    enum: ["user", "admin"],
+  },
 });
 
-// Encrypt password with bcrypt
+// Encrypt password with bcrypt & generate profile picture
 UserSchema.pre("save", async function (next) {
   !this.isModified("password") && next();
   this.password = await bcrypt.hash(this.password, 10);
+  this.profilePicture = String(Math.floor(Math.random() * 5));
 });
 
 UserSchema.methods.matchPassword = async function (inputPassword) {
