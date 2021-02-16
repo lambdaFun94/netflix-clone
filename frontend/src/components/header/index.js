@@ -29,6 +29,10 @@ export default function Header({ bg = true, children, ...restProps }) {
   );
 }
 
+Header.Feature = function HeaderFeature({ children, ...restProps }) {
+  return <Feature {...restProps}>{children}</Feature>;
+};
+
 Header.Frame = function HeaderFrame({ children, ...restProps }) {
   return <Container {...restProps}>{children}</Container>;
 };

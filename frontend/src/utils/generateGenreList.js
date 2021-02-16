@@ -551,28 +551,28 @@ const movies = [
   },
 ];
 
-export default function sortIntoGenres(series, movies) {
-  function genTitles(films) {
-    const arr = [];
-    const hashMap = {};
-    for (let film of films) {
-      let { genre, title } = film;
-      genre = genre
-        .split("-")
-        .map((word) => word[0].toUpperCase() + word.slice(1))
-        .join(" ");
-      if (genre in hashMap) {
-        const idx = hashMap[genre];
-        arr[idx].data.push(title);
-      } else {
-        let obj = { category: genre, data: [title] };
-        arr.push(obj);
-        hashMap[genre] = arr.length - 1;
-      }
+const genTitles = (films) => {
+  const arr = [];
+  const hashMap = {};
+  for (let film of films) {
+    let { genre } = film;
+    genre = genre
+      .split("-")
+      .map((word) => word[0].toUpperCase() + word.slice(1))
+      .join(" ");
+    if (genre in hashMap) {
+      const idx = hashMap[genre];
+      arr[idx].data.push(film);
+    } else {
+      let obj = { category: genre, data: [film] };
+      arr.push(obj);
+      hashMap[genre] = arr.length - 1;
     }
-    return arr;
   }
+  return arr;
+};
 
+export default function sortIntoGenres(series, movies) {
   const obj = {
     films: genTitles(movies),
     series: genTitles(series),

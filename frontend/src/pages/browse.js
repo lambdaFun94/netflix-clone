@@ -17,7 +17,11 @@ export default function Browse() {
   const series =
     allFilms && allFilms.filter((datum) => datum.type === "series");
 
-  const arr = sortIntoCategories(series, films);
+  const slides = sortIntoCategories(series, films);
 
-  return <>{JSON.stringify(arr)}</>;
+  return (
+    <>
+      <BrowseContainer slides={slides} />
+    </>
+  );
 }
