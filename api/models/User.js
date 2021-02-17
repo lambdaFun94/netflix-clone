@@ -37,7 +37,7 @@ const UserSchema = mongoose.Schema({
 UserSchema.pre("save", async function (next) {
   !this.isModified("password") && next();
   this.password = await bcrypt.hash(this.password, 10);
-  this.profilePicture = String(Math.floor(Math.random() * 5));
+  this.profilePicture = String(Math.floor(Math.random() * 5) + 1);
 });
 
 UserSchema.methods.matchPassword = async function (inputPassword) {

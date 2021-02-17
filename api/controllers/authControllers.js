@@ -12,7 +12,12 @@ export const signUpUser = asyncHandler(async (req, res, next) => {
 
   if (userAlreadyExists) throw new CustomError("User already exists", 400);
 
-  const user = await User.create({ email, password, name, profilePicture });
+  const user = await User.create({
+    email,
+    password,
+    name,
+    profilePicture,
+  });
   respondWithToken(user, 201, res);
 });
 
@@ -41,6 +46,7 @@ function respondWithToken(user, statusCode, res) {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
         profilePicture: user.profilePicture,
         token: user.generateSignedJWT(),
       },

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { HeaderContainer } from "../containers/header";
 import { FooterContainer } from "../containers/footer";
@@ -7,9 +8,10 @@ import { Form } from "../components";
 import { signinUser } from "../redux/slices/userSlice";
 import * as ROUTES from "../constants/routes";
 
-export default function Signin({ location, history }) {
+export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const { error, status } = useSelector((state) => state.user);
@@ -20,13 +22,9 @@ export default function Signin({ location, history }) {
     dispatch(signinUser({ email, password }));
   };
 
-  const redirect = location.search
-    ? location.search.split("=")[1]
-    : ROUTES.BROWSE;
-
   useEffect(() => {
-    status === "success" && history.push(redirect);
-  }, [status, redirect, history]);
+    status === "success" && history.push(ROUTES.BROWSE);
+  }, [status, history]);
 
   return (
     <>
