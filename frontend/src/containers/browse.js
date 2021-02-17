@@ -11,8 +11,7 @@ import SelectProfileContainer from "./profiles";
 import logo from "../logo.svg";
 
 export default function BrowseContainer({ films, series }) {
-  const [profile, setProfile] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [slideRows, setSlideRows] = useState(series);
   const user = useSelector((state) => state.user.data);
@@ -20,29 +19,22 @@ export default function BrowseContainer({ films, series }) {
   const history = useHistory();
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 3000);
-  }, [profile.displayName]);
-
-  useEffect(() => {
     setSlideRows(series);
   }, [series]);
 
-  /*
   useEffect(() => {
-    const fuse = new Fuse(slideRows, {
+    const { data } = slideRows;
+    const fuse = new Fuse(data, {
       keys: ["data.description", "data.title", "data.genre"],
     });
     const results = fuse.search(searchTerm).map(({ item }) => item);
 
-    if (slideRows.length > 0 && searchTerm.length > 3 && results.length) {
-      setSlideRows(results);
-    } else {
-      setSlideRows(slides[category]);
+    if (data.length > 0 && searchTerm.length > 3 && results.length) {
+      setSlideRows({ name: slideRows.name, data: results });
     }
   }, [searchTerm]);
-  */
 
-  return profile.displayName ? (
+  return user ? (
     <>
       {loading ? (
         <Loading src={user.profilePicture} />
@@ -136,6 +128,6 @@ export default function BrowseContainer({ films, series }) {
       <FooterContainer />
     </>
   ) : (
-    <SelectProfileContainer user={user} setProfile={setProfile} />
+    <SelectProfileContainer user={user} />
   );
 }
