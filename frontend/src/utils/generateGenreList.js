@@ -551,7 +551,7 @@ const movies = [
   },
 ];
 
-const genTitles = (films) => {
+export const genTitles = (films) => {
   const arr = [];
   const hashMap = {};
   for (let film of films) {
@@ -572,10 +572,10 @@ const genTitles = (films) => {
   return arr;
 };
 
-export default function sortIntoGenres(series, movies) {
-  const obj = {
-    films: genTitles(movies),
-    series: genTitles(series),
-  };
+/*
+export default function sortIntoGenres(name, films) {
+  let obj = {};
+  obj[name] = genTitles(films);
   return obj;
 }
+*/

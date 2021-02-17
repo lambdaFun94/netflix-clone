@@ -18,6 +18,12 @@ const userSlice = createSlice({
     status: "idle",
     error: null,
   },
+  reducers: {
+    signOut(state, action) {
+      state.data = {};
+      localStorage.clear();
+    },
+  },
   extraReducers: {
     [signinUser.pending]: (state, action) => {
       state.status = "loading";
@@ -49,5 +55,7 @@ const userSlice = createSlice({
     },
   },
 });
+
+export const { signOut } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,5 +1,6 @@
 Check Error Checking Everywher
-Sign out
+Logout on Backend
+Protect browse page on backend
 Login Controller
 Security in index.js
 Show profile in header upon login 

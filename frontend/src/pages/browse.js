@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getFilms } from "../redux/slices/filmSlice";
 import BrowseContainer from "../containers/browse";
-import sortIntoCategories from "../utils/generateGenreList";
+import { genTitles } from "../utils/generateGenreList";
 
 export default function Browse() {
   const allFilms = useSelector((state) => state.films.data);
@@ -11,17 +11,17 @@ export default function Browse() {
 
   useEffect(() => {
     dispatch(getFilms());
-  }, []);
+  }, [dispatch]);
 
-  const films = allFilms && allFilms.filter((datum) => datum.type === "film");
-  const series =
-    allFilms && allFilms.filter((datum) => datum.type === "series");
+  let films = allFilms && allFilms.filter((datum) => datum.type === "film");
+  let series = allFilms && allFilms.filter((datum) => datum.type === "series");
 
-  const slides = sortIntoCategories(series, films);
+  films = { name: "films", data: genTitles(films) };
+  series = { name: "series", data: genTitles(series) };
 
   return (
     <>
-      <BrowseContainer slides={slides} />
+      <BrowseContainer series={series} films={films} />
     </>
   );
 }

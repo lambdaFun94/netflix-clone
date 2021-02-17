@@ -2,14 +2,18 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 import * as ROUTES from "../../constants/routes";
-export const getFilms = createAsyncThunk("films/fetchFilmStatus", async () => {
-  try {
-    const { data } = await axios.get(ROUTES.BROWSE_ENDPOINT);
-    return data;
-  } catch (err) {
-    return err;
+export const getFilms = createAsyncThunk(
+  "films/fetchFilmStatus",
+  async (type = "") => {
+    try {
+      const URL = `${ROUTES.BROWSE_ENDPOINT}?type=${type}`;
+      const { data } = await axios.get(URL);
+      return data;
+    } catch (err) {
+      return err;
+    }
   }
-});
+);
 
 const filmSlice = createSlice({
   name: "films",

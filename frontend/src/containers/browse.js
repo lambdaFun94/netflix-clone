@@ -1,29 +1,33 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import Fuse from "fuse.js";
 
-import SelectProfileContainer from "./profiles";
+import { signOut } from "../redux/slices/userSlice";
 import { FooterContainer } from "./footer";
 import { Loading, Header, Card, Player } from "../components";
 import * as ROUTES from "../constants/routes";
+import SelectProfileContainer from "./profiles";
 import logo from "../logo.svg";
 
-export default function BrowseContainer({ slides }) {
-  const [category, setCategory] = useState("series");
+export default function BrowseContainer({ films, series }) {
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [slideRows, setSlideRows] = useState("");
+  const [slideRows, setSlideRows] = useState(series);
   const user = useSelector((state) => state.user.data);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 3000);
   }, [profile.displayName]);
 
   useEffect(() => {
-    setSlideRows(() => slides[category]);
-  }, [slides, category]);
+    setSlideRows(series);
+  }, [series]);
 
+  /*
   useEffect(() => {
     const fuse = new Fuse(slideRows, {
       keys: ["data.description", "data.title", "data.genre"],
@@ -36,6 +40,7 @@ export default function BrowseContainer({ slides }) {
       setSlideRows(slides[category]);
     }
   }, [searchTerm]);
+  */
 
   return profile.displayName ? (
     <>
@@ -50,14 +55,14 @@ export default function BrowseContainer({ slides }) {
           <Header.Group>
             <Header.Logo to={ROUTES.HOME} src={logo} alt="Netflix" />
             <Header.TextLink
-              active={category === "series" ? "true" : "false"}
-              onClick={() => setCategory("series")}
+              active={slideRows.name === "series" ? "true" : "false"}
+              onClick={() => setSlideRows(series)}
             >
               Series
             </Header.TextLink>
             <Header.TextLink
-              active={category === "films" ? "true" : "false"}
-              onClick={() => setCategory("films")}
+              active={slideRows.name === "films" ? "true" : "false"}
+              onClick={() => setSlideRows(films)}
             >
               Films
             </Header.TextLink>
@@ -75,7 +80,12 @@ export default function BrowseContainer({ slides }) {
                   <Header.TextLink>{user.name}</Header.TextLink>
                 </Header.Group>
                 <Header.Group>
-                  <Header.TextLink onClick={() => null}>
+                  <Header.TextLink
+                    onClick={() => {
+                      dispatch(signOut());
+                      history.push(ROUTES.HOME);
+                    }}
+                  >
                     Sign out
                   </Header.TextLink>
                 </Header.Group>
@@ -98,14 +108,14 @@ export default function BrowseContainer({ slides }) {
       </Header>
 
       <Card.Group>
-        {slideRows.map((slideItem) => (
-          <Card key={`${category}-${slideItem.title}`}>
+        {slideRows.data.map((slideItem) => (
+          <Card key={`${slideRows.name}-${slideItem.category}`}>
             <Card.Title>{slideItem.category}</Card.Title>
             <Card.Entities>
               {slideItem.data.map((item) => (
                 <Card.Item key={item._id} item={item}>
                   <Card.Image
-                    src={`/images/${category}/${item.genre}/${item.slug}/small.jpg`}
+                    src={`/images/${slideRows.name}/${item.genre}/${item.slug}/small.jpg`}
                   />
                   <Card.Meta>
                     <Card.SubTitle>{item.title}</Card.SubTitle>
@@ -114,7 +124,7 @@ export default function BrowseContainer({ slides }) {
                 </Card.Item>
               ))}
             </Card.Entities>
-            <Card.Feature category={category}>
+            <Card.Feature category={slideRows.name}>
               <Player>
                 <Player.Button />
                 <Player.Video src="/videos/bunny.mp4" />
