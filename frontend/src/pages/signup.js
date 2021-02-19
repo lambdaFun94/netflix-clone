@@ -26,8 +26,10 @@ export default function Signup({ history, location }) {
     : ROUTES.BROWSE;
 
   useEffect(() => {
-    data && data.user === "user" && history.push(redirect);
-  }, [data, history, redirect]);
+    if (!error && data.role) {
+      history.push(redirect);
+    }
+  }, [data, error, history, redirect]);
 
   return (
     <>

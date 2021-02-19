@@ -14,7 +14,7 @@ export default function Signin() {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const { error, status, data } = useSelector((state) => state.user);
+  const { error, data } = useSelector((state) => state.user);
 
   const isInvalid = password === "" || email === "";
   const handleSignIn = (e) => {
@@ -23,8 +23,10 @@ export default function Signin() {
   };
 
   useEffect(() => {
-    data && data.role === "user" && history.push(ROUTES.BROWSE);
-  }, [data, history]);
+    if (!error && data.role) {
+      history.push(ROUTES.BROWSE);
+    }
+  }, [data, error, history]);
 
   return (
     <>
