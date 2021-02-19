@@ -12,6 +12,7 @@ import logo from "../logo.svg";
 
 export default function BrowseContainer({ films, series }) {
   const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [slideRows, setSlideRows] = useState(series);
   const user = useSelector((state) => state.user.data);
@@ -34,7 +35,7 @@ export default function BrowseContainer({ films, series }) {
     }
   }, [searchTerm]);
 
-  return user ? (
+  return profile.displayName ? (
     <>
       {loading ? (
         <Loading src={user.profilePicture} />
@@ -128,6 +129,6 @@ export default function BrowseContainer({ films, series }) {
       <FooterContainer />
     </>
   ) : (
-    <SelectProfileContainer user={user} />
+    <SelectProfileContainer user={user} setProfile={setProfile} />
   );
 }

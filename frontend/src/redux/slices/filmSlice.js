@@ -14,8 +14,8 @@ export const getFilms = createAsyncThunk(
       },
     };
     try {
-      const { data } = await axios(options);
-      return data;
+      const response = await axios(options);
+      return response.data;
     } catch (err) {
       return err;
     }
@@ -45,6 +45,5 @@ const filmSlice = createSlice({
     },
   },
 });
-console.log(filmSlice);
 
 export default filmSlice.reducer;

@@ -2,7 +2,7 @@
   "name": "netflix-fullstack",
   "version": "1.0.0",
   "type": "module",
-  "description": "Netflix clone with React and Express; frontend built with Karl Hadwen's guidance; backend my own",
+  "description": "Netflix clone with React/Redux and Express; frontend built with Karl Hadwen's guidance; backend my own",
   "main": "index.js",
   "scripts": {
     "api": "nodemon -r dotenv/config api",
@@ -22,11 +22,17 @@
     "bcrypt": "^5.0.0",
     "colors": "^1.4.0",
     "concurrently": "^5.3.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
+    "express-mongo-sanitize": "^2.0.2",
+    "express-rate-limit": "^5.2.6",
+    "helmet": "^4.4.1",
+    "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.16",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "xss-clean": "^0.1.1"
   }
 }

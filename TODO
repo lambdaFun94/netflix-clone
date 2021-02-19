@@ -1,8 +1,4 @@
-Check Error Checking Everywher
-Logout on Backend
-Protect browse page on backend
+Check Error Checking Everywhere
 Login Controller
-Security in index.js
-Show profile in header upon login 
-React-Router Protect Routes
+Signin/Signup bug - flickering after signout 
 

@@ -14,7 +14,7 @@ export default function Signin() {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const { error, status } = useSelector((state) => state.user);
+  const { error, status, data } = useSelector((state) => state.user);
 
   const isInvalid = password === "" || email === "";
   const handleSignIn = (e) => {
@@ -23,8 +23,8 @@ export default function Signin() {
   };
 
   useEffect(() => {
-    status === "success" && history.push(ROUTES.BROWSE);
-  }, [status, history]);
+    data && data.role === "user" && history.push(ROUTES.BROWSE);
+  }, [data, history]);
 
   return (
     <>
@@ -50,7 +50,8 @@ export default function Signin() {
             </Form.Submit>
           </Form.Base>
           <Form.Text>
-            New to Netflix? <Form.Link to="/signup">Sign up now.</Form.Link>
+            New to Netflix?
+            <Form.Link to={ROUTES.SIGNUP}> Sign up now.</Form.Link>
           </Form.Text>
           <Form.Text>
             This page is protected by Google reCAPTCHA, so don't span me

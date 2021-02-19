@@ -13,7 +13,7 @@ export default function Signup({ history, location }) {
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.user);
+  const { error, data } = useSelector((state) => state.user);
 
   const isInvalid = name === "" || password === "" || email === "";
   const handleSignup = async (e) => {
@@ -26,8 +26,8 @@ export default function Signup({ history, location }) {
     : ROUTES.BROWSE;
 
   useEffect(() => {
-    status === "success" && history.push(redirect);
-  }, [status, history, redirect]);
+    data && data.user === "user" && history.push(redirect);
+  }, [data, history, redirect]);
 
   return (
     <>
